@@ -19,7 +19,7 @@ import java.util.Random;
 @Slf4j
 public class DataLoader implements CommandLineRunner {
 
-    private final AdministradorRepository repository;
+    private final AdministradoresRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -31,10 +31,10 @@ public class DataLoader implements CommandLineRunner {
 
         Faker faker = new Faker();
         Random random = new Random();
-        Administrador.Rol[] roles = Administrador.Rol.values();
+        Administradores.Rol[] roles = Administradores.Rol.values();
 
         for (int i = 0; i < 10; i++) {
-            Administrador admin = new Administrador();
+            Administradores admin = new Administradores();
             admin.setNombreCompleto(faker.name().fullName());
             admin.setRut(generarRut(random));
             admin.setEmail(faker.internet().emailAddress());
