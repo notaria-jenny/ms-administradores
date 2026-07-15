@@ -33,3 +33,13 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   packages-to-scan: notaria.jenny.ms_administradores
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true

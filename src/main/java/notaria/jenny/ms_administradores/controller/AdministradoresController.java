@@ -13,6 +13,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -140,6 +144,15 @@ public class AdministradoresController {
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarTodos()).withSelfRel()));
+    }
+
+    // junto a listarTodos(), en la sección LISTADOS:
+    @Operation(summary = "Listar administradores paginados (?page=0&size=20&sort=nombreCompleto)")
+    @ApiResponse(responseCode = "200", description = "Página obtenida exitosamente")
+    @GetMapping("/paginado")
+    public ResponseEntity<Page<AdministradoresResponseDTO>> listarPaginado(
+            @ParameterObject @PageableDefault(size = 20, sort = "nombreCompleto") Pageable pageable) {
+        return ResponseEntity.ok(service.listarPaginado(pageable));
     }
 
     @Operation(summary = "Buscar administradores por nombre")

@@ -12,6 +12,8 @@ import notaria.jenny.ms_administradores.repository.AdministradoresRepository;
 import notaria.jenny.ms_administradores.service.AdministradoresService;
 import lombok.RequiredArgsConstructor;
 import notaria.jenny.ms_administradores.util.RutUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +130,11 @@ public class AdministradoresServiceImpl implements AdministradoresService {
     public List<AdministradoresResponseDTO> listarTodos() {
         return repository.findAllByOrderByNombreCompletoAsc()
                 .stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<AdministradoresResponseDTO> listarPaginado(Pageable pageable){
+        return repository.findAll(pageable).map(this::toResponse);
     }
 
     @Override

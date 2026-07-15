@@ -5,6 +5,8 @@ import notaria.jenny.ms_administradores.dto.AdministradoresResponseDTO;
 import notaria.jenny.ms_administradores.dto.AdministradoresUpdateDTO;
 import notaria.jenny.ms_administradores.dto.PasswordUpdateDTO;
 import notaria.jenny.ms_administradores.model.Administradores.Rol;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,7 @@ public interface AdministradoresService {
     AdministradoresResponseDTO buscarPorRut(String rut);
 
     List<AdministradoresResponseDTO> listarTodos();
+    Page<AdministradoresResponseDTO> listarPaginado(Pageable pageable);
     List<AdministradoresResponseDTO> listarPorNombre(String nombre);
     List<AdministradoresResponseDTO> listarPorRol(Rol rol);
     List<AdministradoresResponseDTO> listarActivos(Boolean activo);
