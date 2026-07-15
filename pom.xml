@@ -11,8 +11,8 @@
 	<groupId>notaria.jenny</groupId>
 	<artifactId>ms-administradores</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>ms-administradores</name>
+	<description>Microservicio de gestión de administradores de la Notaría</description>
 	<url/>
 	<licenses>
 		<license/>
