@@ -11,6 +11,7 @@ import notaria.jenny.ms_administradores.model.Administradores.Rol;
 import notaria.jenny.ms_administradores.repository.AdministradoresRepository;
 import notaria.jenny.ms_administradores.service.AdministradoresService;
 import lombok.RequiredArgsConstructor;
+import notaria.jenny.ms_administradores.util.RutUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ public class AdministradoresServiceImpl implements AdministradoresService {
 
     @Override
     public AdministradoresResponseDTO crear(AdministradoresRequestDTO request) {
+        // Normaliza antes de comparar y guardar ("12345678-k" → "12345678-K")
+        String rutNormalizado = RutUtils.normalizar(request.getRut());
         if (repository.existsByEmail(request.getEmail()))
             throw new RecursoDuplicadoException("El email ya está registrado");
         if (repository.existsByRut(request.getRut()))
@@ -53,6 +56,8 @@ public class AdministradoresServiceImpl implements AdministradoresService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Administrador con ID " + id + " no encontrado"));
 
+        String rutNormalizado = RutUtils.normalizar(request.getRut());
+
         boolean emailCambiado = !admin.getEmail().equalsIgnoreCase(request.getEmail());
         if (emailCambiado && repository.existsByEmail(request.getEmail()))
             throw new RecursoDuplicadoException(
@@ -66,6 +71,7 @@ public class AdministradoresServiceImpl implements AdministradoresService {
         admin.setNombreCompleto(request.getNombreCompleto());
         admin.setEmail(request.getEmail());
         admin.setTelefono(request.getTelefono());
+        admin.setRut(rutNormalizado);
         admin.setRol(request.getRol());
 
         return toResponse(repository.save(admin));
@@ -109,6 +115,7 @@ public class AdministradoresServiceImpl implements AdministradoresService {
 
     @Override
     public AdministradoresResponseDTO buscarPorRut(String rut) {
+        String rutNormalizado = RutUtils.normalizar(rut);
         return repository.findByRut(rut)
                 .map(this::toResponse)
                 .orElseThrow(() -> new RecursoNoEncontradoException(

@@ -3,6 +3,7 @@ package notaria.jenny.ms_administradores.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import notaria.jenny.ms_administradores.model.Administradores;
+import notaria.jenny.ms_administradores.validation.RutValido;
 
 @Data
 public class AdministradoresRequestDTO {
@@ -26,6 +27,7 @@ public class AdministradoresRequestDTO {
 
     @NotBlank
     @Size(max = 12)
+    @RutValido
     private String rut;
 
     @NotNull

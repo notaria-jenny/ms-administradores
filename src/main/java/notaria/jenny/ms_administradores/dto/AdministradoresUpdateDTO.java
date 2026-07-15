@@ -3,6 +3,7 @@ package notaria.jenny.ms_administradores.dto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import notaria.jenny.ms_administradores.model.Administradores.Rol;
+import notaria.jenny.ms_administradores.validation.RutValido;
 
 /**
  * DTO de actualización: NO incluye password.
@@ -26,6 +27,7 @@ public class AdministradoresUpdateDTO {
 
     @NotBlank
     @Size(max = 12)
+    @RutValido
     private String rut;
 
     @NotNull
