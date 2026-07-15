@@ -3,9 +3,9 @@ spring:
     name: ms-administradores
 
   datasource:
-    url: jdbc:mysql://localhost:3306/db_administradores
-    username: root
-    password: ""
+    url: ${DB_URL:jdbc:mysql://localhost:3306/db_administradores}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -32,4 +32,4 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /v3/api-docs
-  packages-to-scan: com.notaria.ms_administradores
+  packages-to-scan: notaria.jenny.ms_administradores
