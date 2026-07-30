@@ -58,22 +58,14 @@ public class AdministradoresServiceImpl implements AdministradoresService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Administrador con ID " + id + " no encontrado"));
 
-        String rutNormalizado = RutUtils.normalizar(request.getRut());
-
         boolean emailCambiado = !admin.getEmail().equalsIgnoreCase(request.getEmail());
         if (emailCambiado && repository.existsByEmail(request.getEmail()))
             throw new RecursoDuplicadoException(
                     "El email '" + request.getEmail() + "' ya está en uso por otro administrador");
 
-        boolean rutCambiado = !admin.getRut().equalsIgnoreCase(request.getRut());
-        if (rutCambiado && repository.existsByRut(request.getRut()))
-            throw new RecursoDuplicadoException(
-                    "El RUT '" + request.getRut() + "' ya está en uso por otro administrador");
-
         admin.setNombreCompleto(request.getNombreCompleto());
         admin.setEmail(request.getEmail());
         admin.setTelefono(request.getTelefono());
-        admin.setRut(rutNormalizado);
         admin.setRol(request.getRol());
 
         return toResponse(repository.save(admin));

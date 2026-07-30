@@ -25,11 +25,6 @@ public class AdministradoresUpdateDTO {
     @Size(max = 20)
     private String telefono;
 
-    @NotBlank
-    @Size(max = 12)
-    @RutValido
-    private String rut;
-
     @NotNull
     private Rol rol;
 }

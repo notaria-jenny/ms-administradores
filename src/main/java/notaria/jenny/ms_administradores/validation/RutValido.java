@@ -12,7 +12,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RutValido {
 
-    String message() default "RUT inválido. Formato esperado: 12345678-5 (sin puntos, con guion) y dígito verificador correcto";
+    String message() default "RUT inválido. Formato esperado: 12345678-5 (sin puntos, con guion) y dígito verificador" +
+            " correcto";
 
     Class<?>[] groups() default {};
 
