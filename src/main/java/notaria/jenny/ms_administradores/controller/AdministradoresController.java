@@ -34,7 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @Tag(name = "Administradores", description = "Gestión de administradores de la Notaría")
 public class AdministradoresController {
 
-    private final AdministradoresService service;
+    private final AdministradoresService administradoresService;
 
     // ──────────────────────────────────────────────
     // CRUD
@@ -48,7 +48,7 @@ public class AdministradoresController {
     })
     @PostMapping
     public ResponseEntity<AdministradoresResponseDTO> crear(@Valid @RequestBody AdministradoresRequestDTO request) {
-        AdministradoresResponseDTO response = service.crear(request);
+        AdministradoresResponseDTO response = administradoresService.crear(request);
         agregarLinks(response);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -63,7 +63,7 @@ public class AdministradoresController {
     @PutMapping("/{id}")
     public ResponseEntity<AdministradoresResponseDTO> actualizar(@PathVariable Long id,
                                                                @Valid @RequestBody AdministradoresUpdateDTO request) {
-        AdministradoresResponseDTO response = service.actualizar(id, request);
+        AdministradoresResponseDTO response = administradoresService.actualizar(id, request);
         agregarLinks(response);
         return ResponseEntity.ok(response);
     }
@@ -77,7 +77,7 @@ public class AdministradoresController {
     @PatchMapping("/{id}/password")
     public ResponseEntity<Void> actualizarPassword(@PathVariable Long id,
                                                    @Valid @RequestBody PasswordUpdateDTO request) {
-        service.actualizarPassword(id, request);
+        administradoresService.actualizarPassword(id, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -88,7 +88,7 @@ public class AdministradoresController {
     })
     @PatchMapping("/{id}/toggle-activo")
     public ResponseEntity<Void> toggleActivo(@PathVariable Long id) {
-        service.toggleActivo(id);
+        administradoresService.toggleActivo(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -103,7 +103,7 @@ public class AdministradoresController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<AdministradoresResponseDTO> buscarPorId(@PathVariable Long id) {
-        AdministradoresResponseDTO response = service.buscarPorId(id);
+        AdministradoresResponseDTO response = administradoresService.buscarPorId(id);
         agregarLinks(response);
         return ResponseEntity.ok(response);
     }
@@ -115,7 +115,7 @@ public class AdministradoresController {
     })
     @GetMapping("/email/{email}")
     public ResponseEntity<AdministradoresResponseDTO> buscarPorEmail(@PathVariable String email) {
-        AdministradoresResponseDTO response = service.buscarPorEmail(email);
+        AdministradoresResponseDTO response = administradoresService.buscarPorEmail(email);
         agregarLinks(response);
         return ResponseEntity.ok(response);
     }
@@ -127,7 +127,7 @@ public class AdministradoresController {
     })
     @GetMapping("/rut/{rut}")
     public ResponseEntity<AdministradoresResponseDTO> buscarPorRut(@PathVariable String rut) {
-        AdministradoresResponseDTO response = service.buscarPorRut(rut);
+        AdministradoresResponseDTO response = administradoresService.buscarPorRut(rut);
         agregarLinks(response);
         return ResponseEntity.ok(response);
     }
@@ -140,7 +140,7 @@ public class AdministradoresController {
     @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente")
     @GetMapping
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarTodos() {
-        List<AdministradoresResponseDTO> lista = service.listarTodos();
+        List<AdministradoresResponseDTO> lista = administradoresService.listarTodos();
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarTodos()).withSelfRel()));
@@ -152,14 +152,14 @@ public class AdministradoresController {
     @GetMapping("/paginado")
     public ResponseEntity<Page<AdministradoresResponseDTO>> listarPaginado(
             @ParameterObject @PageableDefault(size = 20, sort = "nombreCompleto") Pageable pageable) {
-        return ResponseEntity.ok(service.listarPaginado(pageable));
+        return ResponseEntity.ok(administradoresService.listarPaginado(pageable));
     }
 
     @Operation(summary = "Buscar administradores por nombre")
     @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente")
     @GetMapping("/buscar")
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarPorNombre(@RequestParam String nombre) {
-        List<AdministradoresResponseDTO> lista = service.listarPorNombre(nombre);
+        List<AdministradoresResponseDTO> lista = administradoresService.listarPorNombre(nombre);
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarPorNombre(nombre)).withSelfRel()));
@@ -169,7 +169,7 @@ public class AdministradoresController {
     @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente")
     @GetMapping("/rol/{rol}")
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarPorRol(@PathVariable Rol rol) {
-        List<AdministradoresResponseDTO> lista = service.listarPorRol(rol);
+        List<AdministradoresResponseDTO> lista = administradoresService.listarPorRol(rol);
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarPorRol(rol)).withSelfRel()));
@@ -181,7 +181,7 @@ public class AdministradoresController {
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarActivos(
             @RequestParam @Schema(allowableValues = {"activo", "inactivo"}) String estado) {
         Boolean activo = estado.equalsIgnoreCase("activo");
-        List<AdministradoresResponseDTO> lista = service.listarActivos(activo);
+        List<AdministradoresResponseDTO> lista = administradoresService.listarActivos(activo);
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarActivos(estado)).withSelfRel()));
@@ -193,7 +193,7 @@ public class AdministradoresController {
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarPorFecha(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
-        List<AdministradoresResponseDTO> lista = service.listarPorFecha(desde, hasta);
+        List<AdministradoresResponseDTO> lista = administradoresService.listarPorFecha(desde, hasta);
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
                 linkTo(methodOn(AdministradoresController.class).listarPorFecha(desde, hasta)).withSelfRel()));
@@ -207,7 +207,7 @@ public class AdministradoresController {
     @ApiResponse(responseCode = "200", description = "Conteo obtenido exitosamente")
     @GetMapping("/contar/rol/{rol}")
     public ResponseEntity<Long> contarPorRol(@PathVariable Rol rol) {
-        return ResponseEntity.ok(service.contarPorRol(rol));
+        return ResponseEntity.ok(administradoresService.contarPorRol(rol));
     }
 
     // ──────────────────────────────────────────────
