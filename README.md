@@ -81,15 +81,16 @@ Ruta base: `/api/v2/administradores`
 
 ### Listados
 
-| Método | Ruta                              | Descripción                        |
-|--------|-----------------------------------|------------------------------------|
-| `GET`  | `/`                               | Todos, ordenados por nombre        |
-| `GET`  | `/paginado?page=0&size=20`        | Paginado y ordenable               |
-| `GET`  | `/buscar?nombre=`                 | Filtrar por nombre (parcial)       |
-| `GET`  | `/rol/{rol}`                      | Filtrar por rol                    |
-| `GET`  | `/activos?estado=activo`          | Filtrar por estado                 |
-| `GET`  | `/fecha?desde=&hasta=`            | Por rango de fecha de creación     |
-| `GET`  | `/contar/rol/{rol}`               | Contar por rol                     |
+| Método | Ruta                  | Descripción                       |
+|--------|-----------------------|-----------------------------------|
+| `GET`  | `/`                   | Todos, ordenados por nombre       |
+| `GET`  | `/paginado?page=0&size=20` | Paginado y ordenable              |
+| `GET`  | `/buscar?nombre=`     | Filtrar por nombre (parcial)      |
+| `GET`  | `/rol/{rol}`          | Filtrar por rol                   |
+| `GET`  | `/activos?activo=true` | Filtrar por estado                |
+| `GET`  | `/fecha?desde=&hasta=` | Por rango de fecha de creación    |
+| `GET`  | `/contar/rol/{rol}`   | Contar por rol                    |
+| `GET`  | `/contar/activo/`     | Contar por estado activo/inactivo |
 
 Las respuestas individuales incluyen enlaces HATEOAS (`self`, `toggle-activo`, `todos`).
 

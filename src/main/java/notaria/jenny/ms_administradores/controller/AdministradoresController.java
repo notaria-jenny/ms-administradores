@@ -7,7 +7,6 @@ import notaria.jenny.ms_administradores.dto.PasswordUpdateDTO;
 import notaria.jenny.ms_administradores.model.Administradores.Rol;
 import notaria.jenny.ms_administradores.service.AdministradoresService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -179,12 +178,11 @@ public class AdministradoresController {
     @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente")
     @GetMapping("/activos")
     public ResponseEntity<CollectionModel<AdministradoresResponseDTO>> listarActivos(
-            @RequestParam @Schema(allowableValues = {"activo", "inactivo"}) String estado) {
-        Boolean activo = estado.equalsIgnoreCase("activo");
+            @RequestParam Boolean activo) {
         List<AdministradoresResponseDTO> lista = administradoresService.listarActivos(activo);
         lista.forEach(this::agregarLinks);
         return ResponseEntity.ok(CollectionModel.of(lista,
-                linkTo(methodOn(AdministradoresController.class).listarActivos(estado)).withSelfRel()));
+                linkTo(methodOn(AdministradoresController.class).listarActivos(activo)).withSelfRel()));
     }
 
     @Operation(summary = "Listar administradores por rango de fecha de creación")
@@ -208,6 +206,13 @@ public class AdministradoresController {
     @GetMapping("/contar/rol/{rol}")
     public ResponseEntity<Long> contarPorRol(@PathVariable Rol rol) {
         return ResponseEntity.ok(administradoresService.contarPorRol(rol));
+    }
+
+    @Operation(summary = "Contar administradores por estado activo/inactivo")
+    @ApiResponse(responseCode = "200", description = "Conteo obtenido exitosamente")
+    @GetMapping("/contar/activo")
+    public ResponseEntity<Long> contarPorActivo(@RequestParam Boolean activo) {
+        return ResponseEntity.ok(administradoresService.contarPorActivo(activo));
     }
 
     // ──────────────────────────────────────────────
