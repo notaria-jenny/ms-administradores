@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleBodyIlegible(HttpMessageNotReadableException ex) {
         String mensaje = ex.getMessage();
-        String detalle = (mensaje != null && mensaje.contains("Administrador$Rol"))
+        String detalle = (mensaje != null && mensaje.contains("Rol"))
                 ? "Rol inválido. Los valores permitidos son: " + rolesPermitidos()
                 : "El cuerpo de la solicitud contiene un valor inválido";
         return ResponseEntity.badRequest().body(baseBody(HttpStatus.BAD_REQUEST, detalle));
