@@ -31,7 +31,6 @@ public class DataLoader implements CommandLineRunner {
 
         Faker faker = new Faker();
         Random random = new Random();
-        Administradores.Rol[] roles = Administradores.Rol.values();
 
         for (int i = 0; i < 10; i++) {
             Administradores admin = new Administradores();
@@ -40,8 +39,18 @@ public class DataLoader implements CommandLineRunner {
             admin.setEmail(faker.internet().emailAddress());
             admin.setTelefono("+569" + faker.number().numberBetween(10000000, 99999999));
             admin.setPassword(passwordEncoder.encode("Admin123!"));
-            admin.setRol(faker.options().option(roles));
-            admin.setActivo(faker.bool().bool());
+
+            // La notaría tiene un solo notario titular: es el primero y siempre queda
+            // activo, porque sin él no se pueden emitir declaraciones juradas
+            boolean esNotario = (i == 0);
+            admin.setRol(esNotario
+                    ? Administradores.Rol.NOTARIO
+                    : faker.options().option(
+                    Administradores.Rol.ABOGADO,
+                    Administradores.Rol.OFICIAL,
+                    Administradores.Rol.FUNCIONARIA));
+            admin.setActivo(esNotario || faker.bool().bool());
+
             admin.setFechaCreacion(LocalDate.now().minusDays(faker.number().numberBetween(1, 365)));
             repository.save(admin);
         }

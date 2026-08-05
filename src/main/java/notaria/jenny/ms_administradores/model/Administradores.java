@@ -17,7 +17,8 @@ public class Administradores {
     public enum Rol {
         NOTARIO,
         OFICIAL,
-        FUNCIONARIAS
+        FUNCIONARIA,
+        ABOGADO
     }
 
     @Id
