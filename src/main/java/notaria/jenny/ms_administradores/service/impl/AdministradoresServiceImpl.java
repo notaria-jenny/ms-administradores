@@ -38,6 +38,8 @@ public class AdministradoresServiceImpl implements AdministradoresService {
             throw new RecursoDuplicadoException("El email ya está registrado");
         if (administradoresRepository.existsByRut(rutNormalizado))
             throw new RecursoDuplicadoException("El RUT ya está registrado");
+        if (request.getRol() == Rol.NOTARIO)
+            validarNotarioTitularUnico();
 
         Administradores admin = new Administradores();
         admin.setNombreCompleto(request.getNombreCompleto());
@@ -63,6 +65,9 @@ public class AdministradoresServiceImpl implements AdministradoresService {
             throw new RecursoDuplicadoException(
                     "El email '" + request.getEmail() + "' ya está en uso por otro administrador");
 
+        if (request.getRol() == Rol.NOTARIO && admin.getRol() != Rol.NOTARIO)
+            validarNotarioTitularUnico();
+
         admin.setNombreCompleto(request.getNombreCompleto());
         admin.setEmail(request.getEmail());
         admin.setTelefono(request.getTelefono());
@@ -85,6 +90,8 @@ public class AdministradoresServiceImpl implements AdministradoresService {
         Administradores admin = administradoresRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "Administrador con ID " + id + " no encontrado"));
+        if (!admin.getActivo() && admin.getRol() == Rol.NOTARIO)
+            validarNotarioTitularUnico();
         admin.setActivo(!admin.getActivo());
         administradoresRepository.save(admin);
     }
@@ -167,6 +174,14 @@ public class AdministradoresServiceImpl implements AdministradoresService {
     @Override
     public long contarPorActivo(Boolean activo) {
         return administradoresRepository.countByActivo(activo);
+    }
+
+    // VALIDACIONES
+
+    // La notaría tiene un solo notario titular activo a la vez
+    private void validarNotarioTitularUnico() {
+        if (administradoresRepository.existsByRolAndActivo(Rol.NOTARIO, true))
+            throw new RecursoDuplicadoException("Ya existe un notario titular activo");
     }
 
     // MAPPER

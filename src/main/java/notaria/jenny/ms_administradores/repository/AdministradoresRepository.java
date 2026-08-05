@@ -39,4 +39,7 @@ public interface AdministradoresRepository extends JpaRepository<Administradores
 
     // Ordenado alfabéticamente
     List<Administradores> findAllByOrderByNombreCompletoAsc();
+
+    // Para validar que haya un solo notario titular activo a la vez
+    boolean existsByRolAndActivo(Rol rol, Boolean activo);
 }
